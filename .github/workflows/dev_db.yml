@@ -1,0 +1,22 @@
+name: Dev DB
+
+on: 
+  push
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  setup-db:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: psql client
+      run: psql --version
+
+    - name: Install sqlx
+      run: cargo install sqlx-cli --no-default-features --features rustls,postgres,sqlite
+
+    - name: Init DB with Docker and Script
+      run: ./scripts/init_db.sh
