@@ -1,0 +1,31 @@
+name: Dev
+
+on: 
+  push
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Show environment
+      run: cargo --version
+    
+    - name: Run format check
+      run: cargo fmt -- --check
+      
+    - name: Run lint check
+      run: cargo clippy
+      
+    - name: Cargo Check
+      run: cargo check
+      
+    - name: Run Tests
+      run: cargo build
+
+    - name: Run Tests
+      run: cargo test
