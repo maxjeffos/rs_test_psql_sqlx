@@ -24,7 +24,10 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    
+
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
+
     - name: Run format check
       run: cargo fmt -- --check
       
