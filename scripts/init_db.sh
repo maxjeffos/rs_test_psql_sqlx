@@ -60,5 +60,10 @@ sqlx database create
 echo "\n show databases..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\l"  # psql show database
 
-sqlx migrate add create_user_table
+# sqlx migrate add create_user_table
 
+sqlx migrate run
+
+# psql $PSQL_CLI_CONNET_OPTIONS -c "\c mynewdb"  # switch to new db
+
+psql $PSQL_CLI_CONNET_OPTIONS -c "\dt"  # show tables
