@@ -30,15 +30,25 @@ jobs:
 
     - name: Run format check
       run: cargo fmt -- --check
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       
     - name: Run lint check
       run: cargo clippy
-      
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
     - name: Cargo Check
       run: cargo check
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       
     - name: Run Tests
       run: cargo build
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     - name: Run Tests
       run: cargo test
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
