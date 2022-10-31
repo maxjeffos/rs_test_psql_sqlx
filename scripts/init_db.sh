@@ -41,6 +41,7 @@ docker ps
 PSQL_CLI_CONNET_OPTIONS="-h 0.0.0.0 -U ${DB_USER} -p ${DB_PORT} -d postgres"
 echo $PSQL_CLI_CONNET_OPTIONS
 
+# DATABASE_URL is for sqlx
 DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
 echo $DATABASE_URL
 
@@ -61,13 +62,13 @@ echo "\n show databases..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\l"  # psql show database
 
 # use new database name for futre psql commands
-PSQL_CLI_CONNET_OPTIONS="-h 0.0.0.0 -U ${DB_USER} -p ${DB_PORT} -d postgres"
-echo $PSQL_CLI_CONNET_OPTIONS
+PSQL_CLI_CONNET_OPTIONS="-h 0.0.0.0 -U ${DB_USER} -p ${DB_PORT} -d mynewdb"
+echo "PSQL_CLI_CONNET_OPTIONS: ${PSQL_CLI_CONNET_OPTIONS}"
 
 # sqlx migrate add create_user_table
 sqlx migrate run
 
-# psql $PSQL_CLI_CONNET_OPTIONS -c "\c mynewdb"  # switch to new db
+psql $PSQL_CLI_CONNET_OPTIONS -c "\c mynewdb" # switch to new db
 
 echo "showing schemas..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\dn"  # show schemas
