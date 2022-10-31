@@ -15,8 +15,26 @@ jobs:
     - name: psql client
       run: psql --version
 
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
+
     - name: Install sqlx
-      run: cargo install sqlx-cli --no-default-features --features rustls,postgres,sqlite
+      run: cargo install --locked sqlx-cli --no-default-features --features rustls,postgres,sqlite || true
+
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
 
     - name: Init DB with Docker and Script
       run: ./scripts/init_db.sh

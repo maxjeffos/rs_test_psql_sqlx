@@ -14,7 +14,20 @@ jobs:
 
     - name: Show environment
       run: cargo --version
-    
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
+
     - name: Run format check
       run: cargo fmt -- --check
       
