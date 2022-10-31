@@ -38,3 +38,11 @@ jobs:
 
     - name: Init DB with Docker and Script
       run: ./scripts/init_db.sh
+      
+    - name: Show files after running DB script
+      run: ls -la
+
+    - name: Show files after running DB script
+      run: |
+        ls -la migrations
+        cat migrations/*
