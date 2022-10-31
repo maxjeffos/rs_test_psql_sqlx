@@ -54,14 +54,17 @@ echo "make new db"
 DB_NAME=mynewdb
 DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
 echo $DATABASE_URL
-
 export DATABASE_URL
+
 sqlx database create
 echo "\n show databases..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\l"  # psql show database
 
-# sqlx migrate add create_user_table
+# use new database name for futre psql commands
+PSQL_CLI_CONNET_OPTIONS="-h 0.0.0.0 -U ${DB_USER} -p ${DB_PORT} -d postgres"
+echo $PSQL_CLI_CONNET_OPTIONS
 
+# sqlx migrate add create_user_table
 sqlx migrate run
 
 # psql $PSQL_CLI_CONNET_OPTIONS -c "\c mynewdb"  # switch to new db
