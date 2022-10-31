@@ -2,6 +2,16 @@
 set -x
 set -eo pipefail
 
+if ! [ -x "$(which psql)" ]; then
+  echo "error: psql is not installed"
+  exit 1
+fi
+
+if ! [ -x "$(which sqlx)" ]; then
+  echo "error: sqlx is not installed"
+  exit 1
+fi
+
 # Check if a custom user has been set, otherwise default to 'postgres'
 DB_USER=${POSTGRES_USER:=postgres}
 
@@ -14,15 +24,17 @@ DB_NAME="${POSTGRES_DB:=newsletter}"
 # Check if a custom port has been set, otherwise default to '5432'
 DB_PORT="${POSTGRES_PORT:=5432}"
 
-# Launch postgres using Docker
-docker run \
-  -e POSTGRES_USER=${DB_USER} \
-  -e POSTGRES_PASSWORD=${DB_PASSWORD} \
-  -e POSTGRES_DB=${DB_NAME} \
-  -p "${DB_PORT}":5432 \
-  -d postgres \
-  postgres -N 1000
-  # ^ Increased maximum number of connections for testing purposes
+# Launch postgres using Docker. Skip if the SKIP_DOCKER env var is set (to any value).
+if [[ -z ${SKIP_DOCKER} ]]; then
+  docker run \
+    -e POSTGRES_USER=${DB_USER} \
+    -e POSTGRES_PASSWORD=${DB_PASSWORD} \
+    -e POSTGRES_DB=${DB_NAME} \
+    -p "${DB_PORT}":5432 \
+    -d postgres \
+    postgres -N 1000
+    # ^ Increased maximum number of connections for testing purposes
+fi
 
 # Keep pinging Postgres until it's ready to accept commands
 export PGPASSWORD="${DB_PASSWORD}"
@@ -41,7 +53,7 @@ docker ps
 PSQL_CLI_CONNET_OPTIONS="-h 0.0.0.0 -U ${DB_USER} -p ${DB_PORT} -d postgres"
 echo $PSQL_CLI_CONNET_OPTIONS
 
-# DATABASE_URL is for sqlx
+# DATABASE_URL is for sqlx and should be in the form of a regular Postgres connection string
 DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
 echo $DATABASE_URL
 
