@@ -59,3 +59,6 @@ export DATABASE_URL
 sqlx database create
 echo "\n show databases..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\l"  # psql show database
+
+sqlx migrate add create_user_table
+
