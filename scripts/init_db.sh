@@ -66,4 +66,8 @@ sqlx migrate run
 
 # psql $PSQL_CLI_CONNET_OPTIONS -c "\c mynewdb"  # switch to new db
 
+echo "showing schemas..."
+psql $PSQL_CLI_CONNET_OPTIONS -c "\dn"  # show schemas
+
+echo "showing tables..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\dt"  # show tables
