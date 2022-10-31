@@ -1,5 +1,5 @@
 CREATE TABLE users (
     id uuid NOT NULL,
-    PRIMARY_KEY(id),
+    PRIMARY KEY (id),
     name TEXT
 );
