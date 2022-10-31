@@ -74,4 +74,4 @@ echo "showing schemas..."
 psql $PSQL_CLI_CONNET_OPTIONS -c "\dn"  # show schemas
 
 echo "showing tables..."
-psql $PSQL_CLI_CONNET_OPTIONS -c "\dt *.*"  # show tables in all schemas
+psql $PSQL_CLI_CONNET_OPTIONS -c "\dt public.*"  # show tables in schema `public`
