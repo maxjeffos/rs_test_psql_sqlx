@@ -12,8 +12,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Show environment
-      run: cargo --version
+    - name: Show Rust environment
+      run: |
+        cargo version
+        rustup show
+
+    - name: Show psql client
+      run: psql --version
+
+    - name: View cargo bin dir
+      run: ls -la ~/.cargo/bin/
 
     - uses: actions/cache@v3
       with:
@@ -27,6 +35,20 @@ jobs:
 
     - name: View cargo bin dir
       run: ls -la ~/.cargo/bin/
+
+    - name: Install sqlx
+      run: cargo install --locked sqlx-cli --no-default-features --features rustls,postgres,sqlite || true
+
+    - name: Init DB with Docker and Script
+      run: ./scripts/init_db.sh
+
+    - name: Show files after running DB script
+      run: ls -la
+
+    - name: Show files after running DB script
+      run: |
+        ls -la migrations
+        cat migrations/*
 
     - name: Run format check
       run: cargo fmt -- --check
@@ -43,12 +65,17 @@ jobs:
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
       
-    - name: Run Tests
+    - name: Cargo Build
       run: cargo build
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-    - name: Run Tests
+    - name: Cargo Test
       run: cargo test
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    - name: Cargo Run
+      run: cargo run
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
